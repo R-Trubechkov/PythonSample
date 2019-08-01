@@ -1,68 +1,81 @@
- 
-pizza={'peperony': 13}
-drinks={'pepsi': 2}
-adds={'nuggets': 8}
-menu=[pizza,drinks,adds]
+
+menu={'pizza':{'peperony': 13},'drinks':{'pepsi': 2},'adds':{'nuggets': 8}}
+def exeptions():
+    print('Fuck off you leatherman!!!')
+    raise ProcessLookupError
+
+def isAdmin(login,password):
+    if login and password == 'admin':
+        return True
+    else: return False
+def writeMenu():
+    with open("menu.txt",'w' ) as menufile:
+       menufile.write(str(menu))
+       menufile.close()
+      
 def admin():
     print('Youre admin now!')
+    print('Here our menu:\n')
+    print(menu) 
     while True:
-        add=input('what you want to add? pizza/drinks/adds/nothing\n')
-        if add == 'pizza': edit(pizza)
-        elif add == 'drinks': edit(drinks)
-        elif add == 'adds': edit(adds)
-        elif add == 'nothing': break
+        add=input('what you want to add? menu/nothing\n')
+        if add == 'menu': 
+            edit()
+            print('new menu:\n')
+            print(menu) 
+        elif add == 'nothing':
+            writeMenu()
+            break
         else:
-            print('Fuck off you leatherman!!!')
-            raise ProcessLookupError
-        
-
-def edit(field):
+            exeptions()
+def creatingPaycheck(name,count,bill):
+    with open(name + '.txt','w') as billfile:
+        billfile.write("your order:"+"\n")
+        billfile.write(bill)
+        billfile.write(count)
+        billfile.close()            
+            
+            
+def edit():
+    field = input("What type of food you want to add? ")
     dish = input("new dish: ")
     cost = input ("input cost: ")
-    field[dish] = int(cost)
+    menu.setdefault(field)[dish]=int(cost)
     
 def user():
     count=0
-    print('Hello,my friend, please, order smthng,here our menu: ')
-    print(menu)
+    bill=[]
+    name=input('Enter your name:\n')
+    print('Hello user, please, order smthng,here our menu: ')
+    print(menu) 
     while True:
         order=input('What is your choise? ')
-        if order in pizza:count+=pizza[order]
-        if order in adds:count+=adds[order]
-        if order in drinks:count+=drinks[order]
+        for i in menu.keys():
+            if order in menu[i]:
+                count =count + menu[i][order]
+        bill.append(order)
         order=input('Do you want order more? yes/no ')
         if order == 'yes': continue
         elif order == 'no': break
         else:
-            print('Fuck off you leatherman!!!')
-            raise ProcessLookupError
+           exeptions()
     print('Your lunch cost: %d rubles' %count)
-    return count
+    return count and bill
 
-print('Welcome to my Pizzeria!!!')
-while True:
-    choice = input('Who you are? admin/user\n')
-    if choice == 'admin':
-        password=input('Enter password:\n')
-        if len(password) == 4: admin()
-        else:
-            print('Fuck off you leatherman!!!')
-            raise ProcessLookupError
-    elif choice == 'user':
-        name=input('Enter your name:\n')
-        billfile=open(name + '.txt','w')
-        billfile.write("your order:"+"\n")
-        billfile.write(str(user()))
-        billfile.close()
-        exit=input('Do you wonna go?? yes/no')
+
+if __name__ == "__main__":
+    print('Welcome to my Pizzeria!!!')
+    while True:
+        choice = input('Who you are? admin/user\n')
+        if choice == 'admin':
+            login = input('login: ')
+            password = input('password: ')
+            if isAdmin(login,password): admin()
+            else: user()
+        else: user()
+        exit=input('Do you wonna go?? yes/no ')
         if exit == 'yes': break
         elif exit == 'no': continue
         else:
-            print('Fuck off you leatherman!!!')
-            raise ProcessLookupError
-
-    else:
-        print('Fuck off you leatherman!!!')
-        raise ProcessLookupError
-
-print('До новых встреч!')
+            exeptions()
+print('Good bye!')
