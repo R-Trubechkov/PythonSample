@@ -31,8 +31,8 @@ def admin():
 def creatingPaycheck(name,count,bill):
     with open(name + '.txt','w') as billfile:
         billfile.write("your order:"+"\n")
-        billfile.write(bill)
-        billfile.write(count)
+        billfile.write(str(bill)+"\n")
+        billfile.write('\ cost:'+str(count)+' rub.')
         billfile.close()            
             
             
@@ -60,7 +60,8 @@ def user():
         else:
            exeptions()
     print('Your lunch cost: %d rubles' %count)
-    return count and bill
+    creatingPaycheck(name,count,bill)
+    
 
 
 if __name__ == "__main__":
